@@ -6,7 +6,7 @@ export default function Playlists() {
     <Container>
       <ul>
         {/* Mapping through playlists */}
-        <li>Playlist 1</li>
+        <li style={{color:"white"}}>Playlist 1</li>
         <li>Playlist 2</li>
         <li>Playlist 3</li>
         {/* End of mapping */}

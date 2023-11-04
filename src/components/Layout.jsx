@@ -1,23 +1,24 @@
 import React from "react";
-import Sidebar from "./Sidebar";
 import styled from "styled-components";
+import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import Body from "./Body";
 
-export default function Spotify() {
+export default function Layout() {
   return (
     <Container>
-      <div className="spotify__body">
+      <div className="layout_body">
         <Sidebar />
         <div className="body">
           <Navbar />
-          <div className="body__contents">
+          <div >
             <Body />
           </div>
         </div>
       </div>
-      <div className="spotify__footer">
+      
+      <div>
         <Footer />
       </div>
     </Container>
@@ -30,13 +31,13 @@ const Container = styled.div`
   overflow: hidden;
   display: grid;
   grid-template-rows: 85vh 15vh;
-  .spotify__body {
+  .layout_body {
     display: grid;
-    grid-template-columns: 15vw 85vw;
+    grid-template-columns: 22vw 80vw;
     height: 100%;
     width: 100%;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 1));
-    background-color: rgb(32, 87, 100);
+    /* background: linear-gradient(transparent, rgba(0, 0, 0, 1)); */
+    background-color: rgb(18,18,18);
     .body {
       height: 100%;
       width: 100%;
@@ -51,3 +52,4 @@ const Container = styled.div`
     }
   }
 `;
+ 
