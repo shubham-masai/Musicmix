@@ -5,10 +5,36 @@ import { FaSearch } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import Login from "./Login";
 import SignUp from "./SignUp";
-
+import { useEffect } from "react";
+import axios from "axios"
 export default function Navbar() {
   const [loginPopup, setLoginPopup] = useState(false);
   const [signupPopup, setSignupPopup] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [name, setName] = useState("");
+  useEffect(() => {
+    const authToken = localStorage.getItem("AuthToken");
+    if (authToken) {
+      const setProfile = async () => {
+        try {
+          const res = await axios.get("https://loud-weight1875-production.up.railway.app/auth/profile", {
+            headers: {
+              Authorization: `bearer ${authToken}`
+            }
+          });
+
+          if (res.status === 200) {
+            setName(res.data.username);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      setProfile();
+      setIsLoggedIn(true);
+    }
+  }, [isLoggedIn]);
+
   const clickLogin = () => {
     setLoginPopup(true);
     setSignupPopup(false);
@@ -22,9 +48,15 @@ export default function Navbar() {
     setLoginPopup(false);
     setSignupPopup(false);
   }
+
+  const handleLogout = () => {
+    localStorage.removeItem("AuthToken");
+    setIsLoggedIn(false);
+  };
   return (
     <div>
       <Container>
+
         <div className="searchbar">
           <div className="logo" >
             <FaSearch />
@@ -34,21 +66,28 @@ export default function Navbar() {
         <div className="avatar">
 
           <div>
-            <Buttonsignup onClick={clickSignup}>Sign up</Buttonsignup>
-            <ButtonLogin onClick={clickLogin}>Log in</ButtonLogin>
+            {isLoggedIn? (
+              <>
+                <a href="/">
+                  <CgProfile />
+                  <span>{name}</span>
+                </a>
+                <ButtonLogout onClick={handleLogout}>Logout</ButtonLogout>
+              </>
+            ) : (
+              <>
+                <Buttonsignup onClick={clickSignup}>Sign up</Buttonsignup>
+                <ButtonLogin onClick={clickLogin}>Log in</ButtonLogin>
+              </>
+            )}
           </div>
-
-          {/* <a href="/">
-          <CgProfile />
-          <span>Username</span>
-        </a> */}
         </div>
       </Container>
       {
-        loginPopup && <div className="loginDiv"><Login clickCancle={clickCancle} /></div>
+        loginPopup && <div className="loginDiv"><Login clickCancle={clickCancle} setIsLoggedIn={setIsLoggedIn} /></div>
       }
       {
-        signupPopup && <div className="loginDiv"><SignUp clickCancle={clickCancle} /></div>
+        signupPopup && <div className="loginDiv"><SignUp clickCancle={clickCancle} setIsLoggedIn={setIsLoggedIn} /></div>
       }
     </div>
   );
@@ -119,6 +158,20 @@ const Buttonsignup = styled.button`
   }
 `;
 
+const ButtonLogout = styled.button`
+  background-color: rgb(255, 255, 255);
+  color: black;
+  border: none;
+  border-radius: 20px;
+  width: 90px;
+  height: 35px;
+  margin-right: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  &:hover {
+    scale: calc(1.1);
+  }
+`;
 // const Avatar = styled.div`
 //   background-color: black;
 //   padding: 0.3rem 0.4rem;

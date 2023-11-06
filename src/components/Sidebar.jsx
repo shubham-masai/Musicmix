@@ -1,11 +1,15 @@
-
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { MdHomeFilled, MdSearch } from "react-icons/md";
 import { IoLibrary } from "react-icons/io5";
 import { AiOutlinePlus } from "react-icons/ai"
 import { SiYoutubemusic } from "react-icons/si"
+import PlayListModel from "./PlaylistModel"
 export default function Sidebar() {
+  const [flag, setFlag] = useState(false);
+  const clickCancle = () => {
+    setFlag(false);
+  }
   return (
     <Container>
       <TopLinks className="top-links">
@@ -13,8 +17,8 @@ export default function Sidebar() {
         <LinksList>
           <LinkItem>
             {/* <Logo className="logo"> */}
-              <SiYoutubemusic style={{ color: "white", fontSize: "30px" }} />
-              <span style={{color:"white"}}> Music<span style={{color:"white"}}>Mix</span></span>
+            <SiYoutubemusic style={{ color: "white", fontSize: "30px" }} />
+            <span style={{ color: "white" }}> Music<span style={{ color: "white" }}>Mix</span></span>
             {/* </Logo> */}
           </LinkItem>
 
@@ -39,7 +43,10 @@ export default function Sidebar() {
             <h4>Create your first playlist</h4>
             <p>It's easy, we'll help you</p>
             <div>
-              <button className="playlistBtn">Create playlist</button>
+              <button className="playlistBtn" onClick={(e) => { setFlag(!flag) }}>Create playlist</button>
+              {
+                flag && <PlayListModel  clickCancle={clickCancle}/>
+              }
             </div>
           </div>
         </LinksList>
@@ -56,7 +63,7 @@ const Container = styled.div`
   height: 100%;
   width: 100%;
 `;
- 
+
 const LinksList = styled.div`
   list-style-type: none;
   display: flex;

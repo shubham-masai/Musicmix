@@ -1,9 +1,9 @@
 import React from "react";
-import Spotify from "./components/Spotify";
+import Layout from "./components/Layout";
 export default function App() {
   return (
     <div>
-      <Spotify />
+      <Layout />
     </div>
   );
 }

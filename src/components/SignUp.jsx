@@ -1,43 +1,83 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { FiMail, FiLock } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx"
-
-function SignUp({ clickCancle }) {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-
-    const handleLogin = () => {
-        console.log("Email:", email);
-        console.log("Password:", password);
-    };
-    return (
-        <Container>
-            <Form onSubmit={(e) => e.preventDefault()}>
-                <div className="cancleBtn">
-                    <RxCross2 onClick={clickCancle} style={{ fontSize: "30px" }} />
-                </div>
-                <Title>Sign up</Title>
-                <FormGroup>
-                    <Label>Email:</Label>
-                    <Input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </FormGroup>
-                <FormGroup>
-                    <Label>Password:</Label>
-                    <Input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </FormGroup>
-                <ButtonHover onClick={handleLogin}>Register</ButtonHover>
-            </Form>
-        </Container>
-    );
+import Toast from "./Toast";
+import axios from "axios"
+function SignUp({ clickCancle,setIsLoggedIn }) {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    setShowToast(false);
+    const payload = {
+      username,
+      email,
+      password
+    }
+    try {
+      const res = await axios.post("https://loud-weight1875-production.up.railway.app/auth/register", payload);
+      if (res.status === 201) {
+        localStorage.setItem("AuthToken", res.data.token);
+        console.log("token", res.data.token);
+        setSuccessMessage("Registration successful!");
+        setErrorMessage("");
+        setShowToast(true);
+        
+        setTimeout(() => {
+          setIsLoggedIn(true);
+          clickCancle();
+        }, 1000); 
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        setErrorMessage(error.response.data.message);
+        setSuccessMessage("");
+        setShowToast(true);
+      }
+    }
+  };
+  return (
+    <Container>
+      <Form onSubmit={handleSignUp}>
+        <div className="cancleBtn">
+          <RxCross2 onClick={clickCancle} style={{ fontSize: "30px" }} />
+        </div>
+        <Title>Sign up</Title>
+        <FormGroup>
+          <Label>Username:</Label>
+          <Input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label>Email:</Label>
+          <Input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label>Password:</Label>
+          <Input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </FormGroup>
+        <ButtonHover>Register</ButtonHover>
+        {showToast && (
+          <Toast message={successMessage || errorMessage} type={successMessage ? "success" : "error"} />
+        )}
+      </Form>
+    </Container>
+  );
 }
 
 const Container = styled.div`
@@ -55,8 +95,8 @@ left:40%;
 position: absolute;
 right: 20px;
 color:white;
-top: -21px;
-right: -23px;
+top: 10px;
+right: 10px;
 }
 `;
 

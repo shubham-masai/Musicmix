@@ -1,15 +1,19 @@
 import styled from "styled-components";
+import { usePlayerContext } from "./PlayerContext";
 
 export default function CurrentTrack() {
+  const { state, dispatch } = usePlayerContext();
+  const currentSong = state.songs[state.currentSongIndex];
+
   return (
     <Container>
       <div className="track">
-        <div className="track__image">
-          <img src="" alt="currentPlaying" />
+        <div >
+          <img className="track-image" src={currentSong?.album} alt="currentPlaying" />
         </div>
-        <div className="track__info">
-          <h4 className="track__info__track__name"></h4>
-          <h6 className="track__info__track__artists"></h6>
+        <div className="track-info">
+          <h4 className="track-name">{currentSong?.title}</h4>
+          <h6 className="track-artists"></h6>
         </div>
       </div>
     </Container>
@@ -21,18 +25,24 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     gap: 1rem;
-    &__image {
+  }
+
+  .track-image {
+    width: 40x;
+    height: 40px;
+  }
+
+  .track-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+
+    .track-name {
+      color: white;
     }
-    &__info {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-      &__track__name {
-        color: white;
-      }
-      &__track__artists {
-        color: #b3b3b3;
-      }
+    .track-artists {
+      color: #b3b3b3;
     }
   }
 `;
+
