@@ -1,0 +1,70 @@
+###
+
+GET https://loud-weight1875-production.up.railway.app/tracks/list
+# list all music
+###
+
+GET https://loud-weight1875-production.up.railway.app/tracks/detail/6547407c34d482edbe754a3f
+# give details of track by object id as param
+###
+
+
+GET https://loud-weight1875-production.up.railway.app/tracks/stream/6547407c34d482edbe754a3f
+# streams music by passing param
+###
+
+GET https://loud-weight1875-production.up.railway.app/tracks/duration/6547407c34d482edbe754a3f
+# gives duration of music by param 
+###
+
+POST https://loud-weight1875-production.up.railway.app/tracks/create
+
+# UPLOAD music , body according to model.
+
+
+
+###
+POST https://loud-weight1875-production.up.railway.app/auth/register
+# new user , body acc to model, return token
+
+###
+POST https://loud-weight1875-production.up.railway.app/auth/login
+# login, returns token
+
+###
+
+POST https://loud-weight1875-production.up.railway.app/auth/profile
+# get profile detail by passing bearer token in headers or param
+
+###
+POST https://loud-weight1875-production.up.railway.app/playlists/create
+# create playlist , requires name and description in body as is a private route so token required.
+
+
+###
+
+PUT https://loud-weight1875-production.up.railway.app/playlists/update/:playlistId
+# change name or description of playlist
+
+###
+
+POST https://loud-weight1875-production.up.railway.app/playlists/addtrack/:playlistId
+# Add songs to playlist , replace playlist id with real  playlistid , send track id in body. {trackId}
+###
+
+DELETE  https://loud-weight1875-production.up.railway.app/playlists/removetrack/:playlistId/:trackId
+# remove from from playslist , token required
+
+###
+GET  https://loud-weight1875-production.up.railway.app/playlists/userplaylists
+# get all playlist of user , token required
+
+###
+DELETE  https://loud-weight1875-production.up.railway.app/playlists//delete/:playlistId
+# deletes entire playlist
+
+
+
+
+
+

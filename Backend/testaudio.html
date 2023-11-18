@@ -1,0 +1,111 @@
+<!-- <source src="http://localhost:3000/tracks/stream/6543523b4a1b946664cbb1dc" type="audio/mpeg"> -->
+<!-- xhr.open('GET', "http://localhost:3000/tracks/stream/6543523b4a1b946664cbb1dc", true); -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Audio Player </title>
+</head>
+<body>
+    <div id="audioContainer">
+        <audio id="audio" controls style="display: none;"></audio>
+        <div id="customControls">
+            <input type="text" id="trackIdInput" placeholder="Enter Track ID">
+            <button id="playButton">Play</button>
+            <button id="pauseButton">Pause</button>
+            <p>Duration: <span id="duration">Calculating...</span></p>
+            <p>Progress: <span id="progress">0:00</span></p>
+        </div>
+        <div id="progressBar">
+            <div id="currentProgress"></div>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('audio');
+        const playButton = document.getElementById('playButton');
+        const pauseButton = document.getElementById('pauseButton');
+        const durationSpan = document.getElementById('duration');
+        const progressSpan = document.getElementById('progress');
+        const progressBar = document.getElementById('progressBar');
+        const currentProgress = document.getElementById('currentProgress');
+        const trackIdInput = document.getElementById('trackIdInput');
+
+        let audioDuration = 0;
+
+        playButton.addEventListener('click', () => {
+            const trackId = trackIdInput.value;
+            if (trackId) {
+                playTrack(trackId);
+            }
+        });
+
+        playButton.addEventListener('click', () => {
+    const trackId = trackIdInput.value;
+    if (trackId) {
+        fetchAudioDuration(trackId, (duration) => {
+            if (duration !== null) {
+                playTrack(trackId);
+                audioDuration = duration;
+                durationSpan.textContent = formatTime(audioDuration);
+            } else {
+                console.error('Error fetching audio duration.');
+            }
+        });
+    }
+});
+
+// ...
+
+function fetchAudioDuration(trackId, callback) {
+    // Fetch the audio duration for the given track ID
+    fetch(`https://loud-weight1875-production.up.railway.app/tracks/duration/${trackId}`)
+        .then(response => response.json())
+        .then(data => {
+            const duration = data.duration;
+            callback(duration);
+        })
+        .catch(error => {
+            console.error('Error fetching audio duration:', error);
+            callback(null);
+        });
+}
+
+        pauseButton.addEventListener('click', () => {
+            audio.pause();
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            const currentTime = audio.currentTime;
+            progressSpan.textContent = formatTime(currentTime);
+            updateProgressBar(currentTime);
+        });
+
+        function playTrack(trackId) {
+            // Fetch the audio source URL for the given track ID
+            fetch(`https://loud-weight1875-production.up.railway.app/tracks/stream/${trackId}`)
+                .then(response => response.blob())
+                .then(blob => {
+                    audio.src = URL.createObjectURL(blob);
+                    audio.play();
+                })
+                .catch(error => {
+                    console.error('Error fetching and playing the track:', error);
+                });
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            const formattedTime = `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+            return formattedTime;
+        }
+
+        function updateProgressBar(currentTime) {
+            const widthPercentage = (currentTime / audioDuration) * 100;
+            currentProgress.style.width = `${widthPercentage}%`;
+        }
+    </script>
+</body>
+</html>

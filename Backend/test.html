@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Track Uploader</title>
+</head>
+<body>
+    <h1>Add New Track</h1>
+    <form id="trackForm" enctype="multipart/form-data">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required><br>
+
+        <label for="artist">Artist:</label>
+        <input type="text" id="artist" name="artist" required><br>
+        <label for="album">Album:</label>
+        <input type="text" id="album" name="album" required><br>
+
+
+        <label for="audioFile">Audio File:</label>
+        <input type="file" id="audioFile" name="audioFile" accept=".mp3" required><br>
+
+        <button type="submit">Upload Track</button>
+    </form>
+
+    <h2>Uploaded Tracks</h2>
+    <ul id="trackList">
+        <!-- Display uploaded tracks here -->
+    </ul>
+
+    <script>
+        // Add event listener for the form submission
+        document.getElementById("trackForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+
+            // Send a POST request to the server to upload the track
+            try {
+                const response = await fetch("https://loud-weight1875-production.up.railway.app/tracks/create", {
+                    method: "POST",
+                    body: formData,
+                });
+                if (response.status === 201) {
+                    // If the track was successfully uploaded, display it in the list
+                    const trackData = await response.json();
+                    const trackItem = document.createElement("li");
+                    trackItem.textContent = `Title: ${trackData.title}, Artist: ${trackData.artist}`;
+                    document.getElementById("trackList").appendChild(trackItem);
+
+                    // Clear the form
+                    this.reset();
+                } else {
+                    // Handle error scenarios
+                    console.error("Track upload failed.");
+                }
+            } catch (error) {
+                console.error("Network error:", error);
+            }
+        });
+    </script>
+</body>
+</html>
