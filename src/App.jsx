@@ -1,9 +1,11 @@
-import React from "react";
-import Layout from "./components/Layout";
-export default function App() {
+import { AllRoutes } from "./Routes/AllRoutes";
+
+function App() {
   return (
-    <div>
-      <Layout />
-    </div>
+    <>
+      <AllRoutes />
+    </>
   );
 }
+
+export default App;

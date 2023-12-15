@@ -1,204 +1,73 @@
-
-import React, { useState } from "react";
-import styled from "styled-components";
+// import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import { CgProfile } from "react-icons/cg";
-import Login from "./Login";
-import SignUp from "./SignUp";
-import { useEffect } from "react";
-import axios from "axios"
-export default function Navbar() {
-  const [loginPopup, setLoginPopup] = useState(false);
-  const [signupPopup, setSignupPopup] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [name, setName] = useState("");
-  useEffect(() => {
-    const authToken = localStorage.getItem("AuthToken");
-    if (authToken) {
-      const setProfile = async () => {
-        try {
-          const res = await axios.get("https://loud-weight1875-production.up.railway.app/auth/profile", {
-            headers: {
-              Authorization: `bearer ${authToken}`
-            }
-          });
+import { useDispatch, useSelector } from "react-redux";
+import {
+  GET_ALL_SONGS_SUCCESS,
+  SAVE_TO_BEFORE_FILTER,
+} from "../redux/actionTypes";
 
-          if (res.status === 200) {
-            setName(res.data.username);
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      setProfile();
-      setIsLoggedIn(true);
-    }
-  }, [isLoggedIn]);
-
-  const clickLogin = () => {
-    setLoginPopup(true);
-    setSignupPopup(false);
-  }
-  const clickSignup = () => {
-    setSignupPopup(true);
-    setLoginPopup(false);
-  }
-
-  const clickCancle = () => {
-    setLoginPopup(false);
-    setSignupPopup(false);
-  }
-
+export const Navbar = () => {
+  // const [search, setSearch] = useState("");
+  const songs = useSelector((store) => {
+    return store.currentSongs;
+  });
+  const beforeFilter = useSelector((store) => {
+    return store.beforeFilter;
+  });
+  const user = useSelector((store) => {
+    return store.user;
+  });
   const handleLogout = () => {
-    localStorage.removeItem("AuthToken");
-    setIsLoggedIn(false);
+    localStorage.setItem("musicmixtoken", "");
+    window.location.reload();
+  };
+  const dispatch = useDispatch();
+  const handleSearch = (search) => {
+    if (search === "" && beforeFilter.length > 0) {
+      dispatch({ type: GET_ALL_SONGS_SUCCESS, payload: beforeFilter });
+    }
+    if (beforeFilter.length === 0) {
+      dispatch({ type: SAVE_TO_BEFORE_FILTER, payload: songs });
+    }
+    if (beforeFilter.length > 0) {
+      let temp = [...beforeFilter];
+      const filtered = temp.filter((song) => {
+        if (song.title.toLowerCase().includes(search.toLowerCase())) {
+          return true;
+        }
+        return false;
+      });
+      dispatch({ type: GET_ALL_SONGS_SUCCESS, payload: filtered });
+    }
   };
   return (
-    <div>
-      <Container>
-
-        <div className="searchbar">
-          <div className="logo" >
-            <FaSearch />
-          </div>
-          <input type="text" placeholder="What do you want to listen to?" />
+    <div className="text-white bg-primary-800 h-24 rounded flex justify-between items-center p-8">
+      <div className="flex w-2/6 gap-3">
+        <input
+          type="text"
+          placeholder="What to you want to listen ?"
+          className="bg-primary-700 focus:border-primary-700 w-full h-10 rounded p-3"
+          onChange={(e) => {
+            handleSearch(e.target.value);
+          }}
+        />
+        <div
+          className=" mt-3 hover:cursor-pointer text-primary-600 hover:text-white duration-500 ease-in-out"
+          onClick={handleSearch}
+        >
+          <FaSearch style={{ fontSize: "20px" }} />
         </div>
-        <div className="avatar">
+      </div>
 
-          <div>
-            {isLoggedIn? (
-              <>
-                <a href="/">
-                  <CgProfile />
-                  <span>{name}</span>
-                </a>
-                <ButtonLogout onClick={handleLogout}>Logout</ButtonLogout>
-              </>
-            ) : (
-              <>
-                <Buttonsignup onClick={clickSignup}>Sign up</Buttonsignup>
-                <ButtonLogin onClick={clickLogin}>Log in</ButtonLogin>
-              </>
-            )}
-          </div>
-        </div>
-      </Container>
-      {
-        loginPopup && <div className="loginDiv"><Login clickCancle={clickCancle} setIsLoggedIn={setIsLoggedIn} /></div>
-      }
-      {
-        signupPopup && <div className="loginDiv"><SignUp clickCancle={clickCancle} setIsLoggedIn={setIsLoggedIn} /></div>
-      }
+      <div className="flex justify-center items-center gap-10">
+        <h1 className="text-xl">{user?.username}</h1>
+        <button
+          className=" bg-primary-900 text-white pl-5 pr-5 pt-3 pb-3 rounded-lg h hover:bg-primary-700 duration-500 ease-in-out"
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
+      </div>
     </div>
   );
-}
-
-const Container = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2rem;
-  height: 10vh;
-  position: sticky;
-  top: 0;
-  transition: 0.3s ease-in-out;
-  background-color: black;
-
-  .searchbar{
-    display: flex;
-    align-items:center;
-  }
-  .searchbar input{
-    width: 400px;
-    height: 40px;
-    border-radius: 20px;
-    border: none;
-    background-color: rgb(36,36,36);
-    padding-left:50px;
-  }
-  .searchbar .logo {
-    margin-right: -10px;
-    margin-bottom: 15px;
-    color: white;
-  }
-
-  .searchbar .logo svg {
-    position: absolute; 
-    margin-left: 10px;
-  }
-`;
-
-const ButtonLogin = styled.button`
-  background-color: rgb(255,255,255);
-  color: black;
-  border: none;
-  border-radius: 20px;
- width: 90px;
- height: 35px;
-  margin-right: 20px;
-  cursor: pointer;
-  font-weight: bold;
-  &:hover {
-    scale: calc(1.1);
-  }
-`;
-const Buttonsignup = styled.button`
-  background-color: black;
-  color: rgb(167,167,167);;
-  border: none;
-  border-radius: 20px;
-  width: 90px;
- height: 35px;
-  margin-right: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  &:hover {
-    scale: calc(1.1);
-    color: white;
-  }
-`;
-
-const ButtonLogout = styled.button`
-  background-color: rgb(255, 255, 255);
-  color: black;
-  border: none;
-  border-radius: 20px;
-  width: 90px;
-  height: 35px;
-  margin-right: 20px;
-  cursor: pointer;
-  font-weight: bold;
-  &:hover {
-    scale: calc(1.1);
-  }
-`;
-// const Avatar = styled.div`
-//   background-color: black;
-//   padding: 0.3rem 0.4rem;
-//   padding-right: 1rem;
-//   border-radius: 2rem;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// `;
-
-// const AvatarLink = styled.a`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   gap: 0.5rem;
-//   text-decoration: none;
-//   color: white;
-//   font-weight: bold;
-// `;
-
-// const AvatarIcon = styled(CgProfile)`
-//   font-size: 1.3rem;
-//   background-color: #282828;
-//   padding: 0.2rem;
-//   border-radius: 1rem;
-//   color: #c7c5c5;
-// `;
-
-
-
+};
