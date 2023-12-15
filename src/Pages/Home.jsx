@@ -1,4 +1,4 @@
-import { MainBody } from "../components/MainBody";
+import {MainBody} from "../components/MainBody"
 import { Navbar } from "../components/Navbar";
 import { Player } from "../components/Player";
 import { SideBar } from "../components/SideBar";

@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { streamSong } from "../redux/action";
 import { SET_CURRENT_PLAYING } from "../redux/actionTypes";
 import { ProgressBar } from "./ProgressBar";
-import { Modal } from "./MOdal";
+import { Modal } from "./Modal";
 
 export const Player = () => {
   const { load, playing, play, pause, setVolume, looping, loop } =
