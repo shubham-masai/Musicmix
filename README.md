@@ -30,5 +30,5 @@ Navigate effortlessly between songs with next and previous controls.
 
 ## Authors
 **Team Members :**
-
+- [Mukhtar Mohsin](https://github.com/mdmukhtarmohsin) 
 - [Shubham Jayswal](https://github.com/shubham-masai) 
