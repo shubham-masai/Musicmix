@@ -4,7 +4,7 @@
 
 ## Tech Stack
 
-**Front-End:** React | TypScript | Tailwind
+**Front-End:** React | Redux | Tailwind
 
 **Back-End [API] :** Express mongoose
 
