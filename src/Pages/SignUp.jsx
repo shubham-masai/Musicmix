@@ -3,6 +3,7 @@ import { SiYoutubemusic } from "react-icons/si";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { signUpuser } from "../redux/action";
 import { useNavigate } from "react-router-dom";
+import { OAuth } from "../components/Oauth";
 
 export const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -109,6 +110,8 @@ export const SignUp = () => {
             >
               Sign Up
             </button>
+
+            <OAuth />
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
               Already have an Account?{" "}
               <a

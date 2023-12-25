@@ -3,6 +3,7 @@ import { SiYoutubemusic } from "react-icons/si";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { signInUser } from "../redux/action";
 import { useNavigate } from "react-router-dom";
+import { OAuth } from "../components/Oauth";
 
 export const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -16,13 +17,16 @@ export const SignIn = () => {
       errorMessage: store.errorMessage,
     };
   }, shallowEqual);
+
   const handleSignIn = (e) => {
+
+    console.log("google button is not clicked only")
     e.preventDefault();
     signInUser(dispatch, { email, password });
   };
   const handleGuestSignIn = (e) => {
     e.preventDefault();
-    signInUser(dispatch, { email: "test@test.com", password: "test1234" });
+    signInUser(dispatch, { email: "guest@gmail.com", password: "1234" });
   };
   useEffect(() => {
     if (isAuth) {
@@ -84,7 +88,7 @@ export const SignIn = () => {
                 }}
               />
             </div>
-            <div className="flex items-center justify-between">
+            {/* <div className="flex items-center justify-between">
               <div className="flex items-start">
                 <div className="flex items-center h-5">
                   <input
@@ -110,7 +114,7 @@ export const SignIn = () => {
               >
                 Forgot password?
               </a>
-            </div>
+            </div> */}
             {isError && <p className="text-white">Error : {errorMessage}</p>}
             <button
               type="submit"
@@ -119,6 +123,7 @@ export const SignIn = () => {
             >
               Sign in
             </button>
+            <OAuth />
 
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
               Don’t have an account yet?{" "}
@@ -135,6 +140,7 @@ export const SignIn = () => {
             >
               Guest Login
             </button>
+           
           </form>
         </div>
       </div>
