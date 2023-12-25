@@ -31,8 +31,7 @@
  
 ![Screenshot (2290)](https://github.com/shubham-masai/Musicmix/assets/130532573/4eafa37b-2e1f-4e2f-86bd-385d30ee4612)
 
-![Screenshot (2289)](https://github.com/shubham-masai/Musicmix/assets/130532573/81c49a46-4e4a-467f-8278-69fa9a6a6199)
-
+ ![Screenshot (2292)](https://github.com/shubham-masai/Musicmix/assets/130532573/33738029-b698-4ef5-8b56-4a5f124a4b2e)
 
 ## Authors
 **Team Members :**
