@@ -32,8 +32,3 @@
 ![Screenshot (2290)](https://github.com/shubham-masai/Musicmix/assets/130532573/4eafa37b-2e1f-4e2f-86bd-385d30ee4612)
 
  ![Screenshot (2292)](https://github.com/shubham-masai/Musicmix/assets/130532573/33738029-b698-4ef5-8b56-4a5f124a4b2e)
-
-## Authors
-**Team Members :**
-- [Shubham Jayswal](https://github.com/shubham-masai)
-- [Mukhtar mohsin](https://github.com/mdmukhtarmohsin)
